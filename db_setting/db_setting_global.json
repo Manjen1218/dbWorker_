@@ -1,0 +1,124 @@
+{
+    "db_host":"192.168.50.203",
+    "db_port":3306,
+    "db_user":"sql_dev",
+    "db_pwd":"13301330",
+
+    "default_recently_days":7,
+    "default_enable":true,
+
+    "info_folder":"/mnt/info",
+    "insert_error_folder":"/mnt/info/insert_error",
+    "parse_failure_folder":"/mnt/info/parse_fail",
+    "sku_undefined_folder":"/mnt/info/sku_undefined",
+    "unknown_failure_folder":"/mnt/info/unknown_failure",
+
+    "info_path_replace_org":"/mnt/ZB_5F/FTP_log/FTP_log",
+    "info_path_replace_dst":"/mnt/FTP_log",
+
+    "polling_sleep_secs":10,
+    
+    "sku_parser_rule":{
+        "global_db":{
+            "dbname":"global_db",
+            "test_station":{
+                "k2v5_jrd01r_pt":{
+                    "rule":"ParseEngine/sku_setting/global_db.json",
+                    "tablename":"wo",
+                    "folder":"/mnt/FTP_log/-APL/EN1DQNSN1-0821-APL_K2V5-JRD01-R/PT",
+                    "use_wo_grouping": true
+                },
+                "k2v5_jrd02r_pt":{
+                    "rule":"ParseEngine/sku_setting/global_db.json",
+                    "tablename":"wo",
+                    "folder":"/mnt/FTP_log/-APL/EN1DQNSN1-0821-APL_K2V5-JRD02-R/PT",
+                    "use_wo_grouping": true
+                },
+                "k2v5_jrd03r_pt":{
+                    "rule":"ParseEngine/sku_setting/global_db.json",
+                    "tablename":"wo",
+                    "folder":"/mnt/FTP_log/-APL/EN1DQNSN1-0821-APL_K2V5-JRD03-R/PT",
+                    "use_wo_grouping": true
+                },
+                "k2v5_yrk10_pt":{
+                    "rule":"ParseEngine/sku_setting/global_db.json",
+                    "tablename":"wo",
+                    "folder":"/mnt/FTP_log/-APL/EN1DQNSN1-0821-APL_K2V5-YRK10/PT",
+                    "use_wo_grouping": true
+                },
+                "k2v6_jrd10_pt":{
+                    "rule":"ParseEngine/sku_setting/global_db.json",
+                    "tablename":"wo",
+                    "folder":"/mnt/FTP_log/-APL/EN1QQNSN-0723-APL_K2V6-JRD10/PT",
+                    "use_wo_grouping": true
+                },
+                "k2v6_aic10_pdlp":{
+                    "rule":"ParseEngine/sku_setting/global_db.json",
+                    "tablename":"wo",
+                    "folder":"/mnt/FTP_log/-APL/EN1QQNSN-0723-APL_K2V6-AIC10/PDL-P",
+                    "use_wo_grouping": true
+                },
+                "k2v6_aic10_pt":{
+                    "rule":"ParseEngine/sku_setting/global_db.json",
+                    "tablename":"wo",
+                    "folder":"/mnt/FTP_log/-APL/EN1QQNSN-0723-APL_K2V6-AIC10/PT",
+                    "use_wo_grouping": true
+                },
+                "k2v6_aic20_pdlp":{
+                    "rule":"ParseEngine/sku_setting/global_db.json",
+                    "tablename":"wo",
+                    "folder":"/mnt/FTP_log/-APL/EN1QQNSN-0723-APL_K2V6-AIC20/PDL-P",
+                    "use_wo_grouping": true
+                },
+                "k2v6_aic20_pt":{
+                    "rule":"ParseEngine/sku_setting/global_db.json",
+                    "tablename":"wo",
+                    "folder":"/mnt/FTP_log/-APL/EN1QQNSN-0723-APL_K2V6-AIC20/PT",
+                    "use_wo_grouping": true
+                },
+                "k2x_n_respin_pt":{
+                    "rule":"ParseEngine/sku_setting/global_db_k2x.json",
+                    "tablename":"wo",
+                    "folder":"/mnt/FTP_log/-APL/EN4VFNSN1-0217-APL_K2X-N_respin/PT",
+                    "use_wo_grouping": true
+                },
+                "k2x_n2_pt":{
+                    "rule":"ParseEngine/sku_setting/global_db_k2x.json",
+                    "tablename":"wo",
+                    "folder":"/mnt/FTP_log/-APL/EN4VFNSN1-0217-APL_K2X-N2/PT",
+                    "use_wo_grouping": true
+                },
+                "k2v4_n2_pt":{
+                    "rule":"ParseEngine/sku_setting/global_db.json",
+                    "tablename":"wo",
+                    "folder":"/mnt/FTP_log/-APL/EN2CFNSN1-0519-APL_K2V4-N2/PT",
+                    "use_wo_grouping": true
+                },
+                "k2v4_n3_pt":{
+                    "rule":"ParseEngine/sku_setting/global_db.json",
+                    "tablename":"wo",
+                    "folder":"/mnt/FTP_log/-APL/EN2CFNSN1-0519-APL_K2V4-N3/PT",
+                    "use_wo_grouping": true
+                },
+                "k2v4_na2_pt":{
+                    "rule":"ParseEngine/sku_setting/global_db.json",
+                    "tablename":"wo",
+                    "folder":"/mnt/FTP_log/-APL/EN2CFNSN1-0519-APL_K2V4-NA2/PT",
+                    "use_wo_grouping": true
+                },
+                "k2x_a_32g_t2_pt":{
+                    "rule":"ParseEngine/sku_setting/global_db_k2x.json",
+                    "tablename":"wo",
+                    "folder":"/mnt/FTP_log/-APL/EN4VFNSN1-0217-APL_K2X-A-32G-T2/PT",
+                    "use_wo_grouping": true
+                },
+                "k2x_a_32g_t2a_pt":{
+                    "rule":"ParseEngine/sku_setting/global_db_k2x.json",
+                    "tablename":"wo",
+                    "folder":"/mnt/FTP_log/-APL/EN4VFNSN1-0217-APL_K2X-A-32G-T2A/PT",
+                    "use_wo_grouping": true
+                }
+            }
+        }
+    }
+}

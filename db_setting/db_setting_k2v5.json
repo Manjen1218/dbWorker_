@@ -1,0 +1,34 @@
+{
+    "db_host":"192.168.50.203",
+    "db_port":3306,
+    "db_user":"sql_dev",
+    "db_pwd":"13301330",
+
+    "default_recently_days":30,
+    "default_enable":true,
+
+    "info_folder":"/mnt/info",
+    "insert_error_folder":"/mnt/info/insert_error",
+    "parse_failure_folder":"/mnt/info/parse_fail",
+    "sku_undefined_folder":"/mnt/info/sku_undefined",
+    "unknown_failure_folder":"/mnt/info/unknown_failure",
+    
+    "info_path_replace_org":"/mnt/ZB_5F/FTP_log/FTP_log",
+    "info_path_replace_dst":"/mnt/FTP_log",
+
+    "polling_sleep_secs":10,
+        
+    "sku_parser_rule" :{
+        "K2v5_JRD03_R":{
+            "dbname":"k2v5_jrd03r",
+            "test_station":{
+                "pt":{
+                    "rule":"ParseEngine/sku_setting/k2v5_jrd03r/k2v5_jrd03r_pt.json",
+                    "tablename":"pt",
+                    "folder":"/mnt/FTP_log/-APL/EN1DQNSN1-0821-APL_K2V5-JRD03-R/PT",
+                    "mcc_rule":"ParseEngine/sku_setting/mcc.json"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "db_host":"192.168.50.229",
+    "db_port":3306,
+    "db_user":"sql_dev",
+    "db_pwd":"13301330",
+    "database": "k2v5_jrd03r",
+    "table": "pt",
+    "recent_days": 180
+}
