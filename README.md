@@ -1,5 +1,7 @@
 # dbWorker — Database & Log-Parsing Toolkit
 
+[From Accton Technology Corporation]
+
 `dbWorker` is a collection of Python 3 utilities that **parse production‐line log files**, load them into a MariaDB / MySQL database and provide rich analytics & reporting commands.
 
 It was designed for factory environments where large volumes of *`.cap`* (capture) files are continuously produced by multiple SKUs / test-stations and must be converted into structured data in near-real-time.
