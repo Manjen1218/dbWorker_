@@ -1,6 +1,8 @@
 # dbWorker — Database & Log-Parsing Toolkit
 
-[From Accton Technology Corporation]
+A **clean-room**, generic example service, reimplementation inspired by Accton Technology project, with no confidential content.
+This project is **not derived from any company code or proprietary software**.
+It is designed purely as an open-source educational example.
 
 `dbWorker` is a collection of Python 3 utilities that **parse production‐line log files**, load them into a MariaDB / MySQL database and provide rich analytics & reporting commands.
 
@@ -8,7 +10,7 @@ It was designed for factory environments where large volumes of *`.cap`* (captur
 
 ---
 
-## 1  Repository Layout
+## 1.  Repository Layout
 
 ```text
 ┬ dbWorker/                 ← project root
@@ -44,73 +46,41 @@ It was designed for factory environments where large volumes of *`.cap`* (captur
 └─ README.md (this file)
 ```
 
-## 2  Quick Start
+## 2.  Quick Start
 
 ```bash
-# 1. Clone & enter
-$ git clone <repo-url> && cd dbWorker
+# Clone & enter
+git clone <repo-url> && cd dbWorker
 
-# 2. Create virtual-env (optional but recommended)
-$ python3 -m venv .venv && source .venv/bin/activate
+# Optional: create virtual environment
+python3 -m venv .venv && source .venv/bin/activate
 
-# 3. Install dependencies
-$ pip install -r requirements.txt   # see Section 7 for contents
+# Install dependencies
+pip install -r requirements.txt
 
-# 4. Edit database settings
-$ cp db_setting/db_setting_example.json db_setting/db_setting.json
-$ vim db_setting/db_setting.json     # fill in host/user/password …
+# Prepare database config
+cp db_setting/db_setting_example.json db_setting/db_setting.json
+vim db_setting/db_setting.json   # fill in host/user/password
 
-# 5. Ingest a folder once
-$ python3 worker/worker_once_stable.py --config db_setting/db_setting.json   # logs in ./logs/
+# Run one-time ingestion
+python3 workers/worker_once_stable.py --config db_setting/db_setting.json
 ```
 
 > **Tip** Every script can also be launched directly, e.g. `python3 tools/parse_test.py …`. Internally each script appends the project root to `sys.path`, so absolute location does not matter.
 
 ---
 
-## 3  db_setting.json Explained
-
-```jsonc
-{
-  "host"            : "127.0.0.1",
-  "user"            : "root",
-  "password"        : "secret",
-  "port"            : 3306,
-  "default_recently_days": 30,
-  "default_enable"  : true,
-  "sku_parser_rule" : {
-    "K2V5_JRD03_R" : {
-      "dbname"      : "k2v5_jrd03r",
-      "test_station": {
-        "pt" : {
-          "folder"   : "/mnt/FTP_log/.../PT",
-          "tablename": "pt",
-          "rule"     : "ParseEngine/sku_setting/k2v5_jrd03r/k2v5_jrd03r_pt.json",
-          "recently_days": 7,
-          "time_column"  : "tbeg",
-          "mcc_rule" : "ParseEngine/sku_setting/mcc.json" // if it has MCC.
-        }
-      }
-    }
-  },
-  "info_folder"           : "/mnt/info",     // worker_monitor only
-  "info_path_replace_org" : "/mnt/FTP_log", // path substitution
-  "info_path_replace_dst" : "/ftp",
-  "insert_error_folder"   : "./log_bin/insert_error",
-  "parse_failure_folder"  : "./log_bin/parse_failure",
-  "sku_undefined_folder"  : "./log_bin/sku_undefined",
-  "unknow_failure_folder" : "./log_bin/unknown",
-  "polling_sleep_secs"    : 3
-}
-```
+## 3.  Configuration (db_setting.json)
+Defines database connection, SKU rules, folder paths, and polling parameters.
+See the included db_setting_example.json for reference.
 
 ---
 
-## 4  Main Scripts
+## 4. Architecture & Performance
 
 | Script | Purpose | Example |
 | ------ | ------- | ------- |
-| `tools/parse_test.py` | Parse single `.cap` or whole folder & print or save to CSV | `python3 tools/parse_test.py --json_rule sku.json --cap C519…441.cap` |
+| `tools/parse_test.py` | Parse single `.cap` or whole folder & print or save to CSV | `python3 tools/parse_test.py --json_rule sku.json --cap ....cap` |
 | `workers/worker_once_stable.py` | Batch insert *new* files under each configured folder into its DB table (no config parameter is default test_db json avoid wrong operation) | `python3 workers/worker_once.py --config db_setting/db_setting.json` |
 | `workers/worker_monitor.py` | Watch an *info* drop-folder for new `*.txt` manifests, parse corresponding `.cap`, insert and route successes / errors to sub-folders | `python3 -m workers.worker_monitor` |
 | `tools/reporter.py` | Analyse WO yield, fail distribution, JIG stats, SN history | `python3 tools/reporter.py --wo WO12345 --fail --jig` |
@@ -127,12 +97,12 @@ The `worker_once_stable.py` script uses a sophisticated multi-threading architec
 
 ![Worker_once_stable.py Multi-threading Architecture](pics/dbWorker_worker_once_workflow.svg)
 
-**Performance Optimization:**
-- writer(mcc/file/re-schema) program pattern with thread-safe queue
-- Batch insertion: 100~1000 records/second to database (Depends on Rule Complexity)
-- Automatic schema synchronization
-- Exception tracking in separate database
-- Current 3 million records in main db, Data timestamp is around 150 days. (Re-make) Almost Cost one night to push.
+Highlights:  
+- Thread-safe writers (MCC/File/Re-schema)  
+- Batch insertion: up to 100–1000 records/sec (depending on complexity)  
+- Auto table creation & schema sync 
+- Independent error logging  
+- Designed to handle millions of records efficiently
 
 ---
 
@@ -140,28 +110,28 @@ The `worker_once_stable.py` script uses a sophisticated multi-threading architec
 
 To ensure safe concurrent operation, `dbWorker` uses explicit database and table locking with short timeouts:
 
+To avoid deadlocks, dbWorker uses short-timeout database and table locks:
 - If a database or table is locked by another process, the current operation **skips** that table or database and moves on, avoiding long waits or deadlocks.
-- Only minimal warnings are logged for lock timeouts (e.g., `[WARN] Skipped table pt due to lock timeout`).
-- This makes the toolkit robust for multi-process or multi-user environments.
+- Locked resources are skipped with warnings instead of blocking.
+- Safe for multi-process and multi-user operation.
 
 ---
 
 ## 6. Logging
 
-`core.Logger` sends **ANSI-coloured**, timestamped messages to stdout **and** daily-rotated files under `./logs/<YYYYMMDD>.log`.
+All logs are colourised and timestamped via core.Logger.  
+Daily log files are stored under ./logs/YYYYMMDD.log.  
 Log levels: *INFO*, *WARN*, *ERROR*, *OK*, *TITLE*, *SUB_TITLE*.
 
 ---
 
-## 7. Extending the Parse Engine
+## 7. Extending the Parser
 
 ### Important: ParseEngine Setup
-
-The project depends on a separate ParseEngine repository. After cloning this repository, you need to also clone the ParseEngine:
-
-```bash
-git clone http://61.219.235.17:7105/K2_COMM/ParseEngine.git
-```
+Rules are defined in JSON under ParseEngine/sku_setting/.  
+Each rule file describes how to extract structured data from raw logs.  
+ 
+You can clone or replace the ParseEngine module with your own parser implementation.  
 
 ---
 
@@ -192,7 +162,7 @@ pip install -r requirements.txt
 ---
 
 ## 10. License & Contributing
+It is a clean-room reimplementation inspired by industrial data-processing concepts — no proprietary code or confidential content included.
 
-This code is proprietary **Accton Technology** tooling. Please contact the maintainers before redistributing.
-
-Contributions are welcome via pull requests: follow *PEP-8*, type-hint new functions, and include unit tests under `tests/`.
+Contributions are welcome!
+Follow PEP-8, use type hints, and include unit tests under tests/.
